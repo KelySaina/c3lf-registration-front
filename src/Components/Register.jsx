@@ -45,7 +45,8 @@ export default function Register() {
     const [emptyFields, setEmptyFields] = useState([]);
     const allowedCharactersRegex = /^[a-zA-Z\s-]*$/;
     const numberRegex = /d/
-    const HOST = "https://api.serveo.net"
+    const HOST = process.env.REACT_APP_HOST
+    //const ADMIN_TOKEN = process.env.REACT_APP_ADMIN_TOKEN
 
     const [f_name, setFName] = useState('');
     const [f_name_error, setFNameError] = useState(false);

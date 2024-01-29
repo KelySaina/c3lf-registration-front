@@ -7,12 +7,15 @@ import InputAdornment from '@mui/material/InputAdornment';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 function AllMembers() {
     const [members, setMembers] = useState([]);
     const [filteredMembers, setFilteredMembers] = useState([]);
-    const HOST = "https://api.serveo.net"
-    const ADMIN_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6IktlbHlTYWluYSIsImlhdCI6MTcwNTkxMzY0MX0.0MEgaJgMju6pqAu2TLqFmOV7zsPi6EDs4uoKXk1HvzM"
+    const HOST = process.env.REACT_APP_HOST
+    const ADMIN_TOKEN = process.env.REACT_APP_ADMIN_TOKEN
+    const [isAdmin, setIsAdmin] = useState(false)
 
     const getAllMembers = async () => {
         try {
@@ -81,50 +84,90 @@ function AllMembers() {
         );
     };
 
+    const handleLog = (e) => {
+        const adminPass = process.env.REACT_APP_ADMIN_PASS
+        console.log(adminPass)
+        let pass = e.target.value;
+        if (pass === adminPass) {
+            setIsAdmin(true)
+        }
+    }
+
+    const [isVisible, setIsVisible] = useState(false)
+    const handleVisible = () => {
+        isVisible ? setIsVisible(false) : setIsVisible(true)
+    }
+
+
 
     return (
         <>
-            <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: "10px" }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
+            {
+                isAdmin ? (
+
+                    <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: "10px" }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
+                                <TextField
+                                    size="small"
+                                    type="text"
+                                    placeholder="Search by Matricule"
+                                    onChange={handleSearch}
+                                    InputProps={{
+                                        endAdornment:
+                                            <InputAdornment position="end">
+                                                <ManageSearchIcon />
+                                            </InputAdornment>,
+                                    }}
+                                />
+                            </div>
+                            <div>
+                                <h1 className="bold-text">{filteredMembers.length}/{members.length}</h1>
+                                <h2 className="smaller-text">members found</h2>
+                            </div>
+                        </div>
+                        <div className="all-members-container" style={{
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'space-around'
+                        }}>
+                            {filteredMembers.map((member) => (
+                                <ProfileCard
+                                    key={member.matricule}
+                                    username={member.username}
+                                    level={member.level}
+                                    matricule={member.matricule}
+                                    paid={member.paid ? "4000" : "-"}
+                                    age={member.age ? member.age : "-"}
+                                    avatar={member.imgUrl ? member.imgUrl : "./images/c3lf.jpg"}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                ) : (
+                    <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                        <Typography variant="h3">
+                            Enter Administrator password to see all members
+                        </Typography>
                         <TextField
                             size="small"
-                            type="text"
-                            placeholder="Search by Matricule"
-                            onChange={handleSearch}
+                            type={isVisible ? "text" : "password"}
+                            label="Admin Password"
+                            onChange={handleLog}
                             InputProps={{
                                 endAdornment:
-                                    <InputAdornment position="end">
-                                        <ManageSearchIcon />
+                                    <InputAdornment position="end" onClick={handleVisible}>
+                                        {isVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
                                     </InputAdornment>,
                             }}
+                            style={{ width: '50%', margin: '50px 0' }}
                         />
-                        <Typography className="smaller-text"><b>{filteredMembers.length} </b>{filteredMembers.length > 1 ? "members" : "member"} found</Typography>
                     </div>
-                    <div>
-                        <h1 className="bold-text">{members.length}</h1>
-                        <h2 className="smaller-text">{members.length > 1 ? "members" : "member"}</h2>
-                    </div>
-                </div>
-                <div className="all-members-container" style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    justifyContent: 'space-around'
-                }}>
-                    {filteredMembers.map((member) => (
-                        <ProfileCard
-                            key={member.matricule}
-                            username={member.username}
-                            level={member.level}
-                            matricule={member.matricule}
-                            paid={member.paid ? "4000" : "-"}
-                            age={member.age ? member.age : "-"}
-                            avatar={member.imgUrl ? member.imgUrl : "./images/c3lf.jpg"}
-                        />
-                    ))}
-                </div>
-            </div>
+
+                )
+            }
             <ScrollToTopButton />
+
         </>
     );
 }

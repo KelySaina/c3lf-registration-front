@@ -14,7 +14,8 @@ function Scanner() {
     const [openQRScanner, setOpenQRScanner] = useState(false);
     const [userData, setUserData] = useState({});
     const [facingMode, setFacingMode] = useState('user');
-    const HOST = "https://api.serveo.net"
+    const HOST = process.env.REACT_APP_HOST
+    //const ADMIN_TOKEN = process.env.REACT_APP_ADMIN_TOKEN
 
     const handleScan = useCallback(data => {
         if (data) {

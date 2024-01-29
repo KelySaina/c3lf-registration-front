@@ -63,8 +63,8 @@ const RightSidePaper = styled(Paper)(({ theme }) => ({
 }));
 
 export default function UserProfile() {
-    const HOST = "https://api.serveo.net"
-    const ADMIN_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6IktlbHlTYWluYSIsImlhdCI6MTcwNTkxMzY0MX0.0MEgaJgMju6pqAu2TLqFmOV7zsPi6EDs4uoKXk1HvzM"
+    const HOST = process.env.REACT_APP_HOST
+    const ADMIN_TOKEN = process.env.REACT_APP_ADMIN_TOKEN
     const { matricule } = useParams()
     const [avatar, setAvatar] = useState(null)
     const [userInfos, setUserInfos] = useState({
