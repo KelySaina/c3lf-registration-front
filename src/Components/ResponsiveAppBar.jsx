@@ -9,6 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const pages = ['register', 'scan', 'members'];
 
@@ -25,6 +26,11 @@ function ResponsiveAppBar() {
 
     const goToPage = (page) => {
         window.location.href = `/${page}`
+    }
+
+    const handleLogOut = () => {
+        localStorage.removeItem("passc3lf")
+        window.location.href = '/members'
     }
 
     return (
@@ -114,10 +120,14 @@ function ResponsiveAppBar() {
                             </Button>
                         ))}
                     </Box>
+                    <div>
+                        <Button onClick={handleLogOut} variant='contained' endIcon={<LogoutIcon />} style={{ color: 'blue', borderColor: 'white', background: 'white' }}>Log Out</Button>
+                    </div>
 
                 </Toolbar>
-            </Container>
-        </AppBar>
+            </Container >
+
+        </AppBar >
     );
 }
 export default ResponsiveAppBar;

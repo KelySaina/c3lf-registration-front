@@ -15,7 +15,7 @@ function AllMembers() {
     const [filteredMembers, setFilteredMembers] = useState([]);
     const HOST = process.env.REACT_APP_HOST
     const ADMIN_TOKEN = process.env.REACT_APP_ADMIN_TOKEN
-    const [isAdmin, setIsAdmin] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(localStorage.getItem("passc3lf") || false)
 
     const getAllMembers = async () => {
         try {
@@ -53,6 +53,8 @@ function AllMembers() {
 
     useEffect(() => {
         getAllMembers();
+        setIsAdmin(localStorage.getItem("passc3lf"))
+
     }, []);
 
     const handleSearch = (e) => {
@@ -86,9 +88,11 @@ function AllMembers() {
 
     const handleLog = (e) => {
         const adminPass = process.env.REACT_APP_ADMIN_PASS
-        console.log(adminPass)
+
         let pass = e.target.value;
         if (pass === adminPass) {
+            localStorage.setItem("passc3lf", true)
+            localStorage.setItem("logged", true)
             setIsAdmin(true)
         }
     }

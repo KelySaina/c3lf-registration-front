@@ -28,6 +28,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { useNavigate } from 'react-router-dom';
+
 
 
 function Copyright(props) {
@@ -63,6 +65,7 @@ const RightSidePaper = styled(Paper)(({ theme }) => ({
 }));
 
 export default function UserProfile() {
+    const navigate = useNavigate()
     const HOST = process.env.REACT_APP_HOST
     const ADMIN_TOKEN = process.env.REACT_APP_ADMIN_TOKEN
     const { matricule } = useParams()
@@ -79,6 +82,8 @@ export default function UserProfile() {
         username: '',
         level: ''
     })
+
+    const [isAdmin, setIsAdmin] = useState(localStorage.getItem("passc3lf") || false)
 
     const getMemberInfos = async () => {
         try {
@@ -135,6 +140,7 @@ export default function UserProfile() {
 
     useEffect(() => {
         getMemberInfos();
+        setIsAdmin(localStorage.getItem("passc3lf"))
     }, [matricule]);
 
     const handleChange = (event) => {
@@ -249,112 +255,121 @@ export default function UserProfile() {
 
     return (
         <>
-            <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">
-                    {"Are you sure you want to delete this information"}
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        This action is irreversible. You may have to re-enter the informations all over again
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} variant="contained" style={{ background: 'tomato', border: 'tomato' }}>Cancel</Button>
-                    <Button onClick={deleteMember} variant="outlined">
-                        Continue
-                    </Button>
-                </DialogActions>
-            </Dialog>
-            <Stack direction="row" spacing={3} sx={{ padding: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <LeftSidePaper variant="outlined">
-                    <div style={{ border: 'solid rgb(206, 206, 206) 1px', borderRadius: '50%' }}>
-
-                        <Badge
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'right',
-                            }}
-                            badgeContent={
-                                <IconButton style={{ background: 'rgb(110, 110, 220)', color: "whitesmoke" }}>
-                                    <AddPhotoAlternateIcon />
-                                </IconButton>
-                            }
-                            overlap="circular"
-                            onClick={handleBadgeClick}
+            {
+                isAdmin ? (
+                    <>
+                        <Dialog
+                            open={open}
+                            onClose={handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
                         >
-                            <Avatar alt={stacticData.username} src={avatar} sx={{ width: '150px', height: '150px' }} />
-                        </Badge>
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            style={{ display: 'none' }}
-                            onChange={handleFileChange}
-                        />
-                    </div>
-                    <List>
-                        <ListItem disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Grid3x3Icon />
-                                </ListItemIcon>
-                                <ListItemText primary={matricule} />
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <PersonIcon />
-                                </ListItemIcon>
-                                <ListItemText primary={stacticData.username} />
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <MilitaryTechIcon />
-                                </ListItemIcon>
-                                <ListItemText primary={stacticData.level} />
-                            </ListItemButton>
-                        </ListItem>
-                    </List>
-                </LeftSidePaper>
+                            <DialogTitle id="alert-dialog-title">
+                                {"Are you sure you want to delete this information"}
+                            </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    This action is irreversible. You may have to re-enter the informations all over again
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleClose} variant="contained" style={{ background: 'tomato', border: 'tomato' }}>Cancel</Button>
+                                <Button onClick={deleteMember} variant="outlined">
+                                    Continue
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                        <Stack direction="row" spacing={3} sx={{ padding: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <LeftSidePaper variant="outlined">
+                                <div style={{ border: 'solid rgb(206, 206, 206) 1px', borderRadius: '50%' }}>
 
-                <RightSidePaper variant="outlined">
-                    <Typography variant='h5' align='left' style={{ marginBottom: '25px' }}><b>Edit Member Informations</b></Typography>
+                                    <Badge
+                                        anchorOrigin={{
+                                            vertical: 'bottom',
+                                            horizontal: 'right',
+                                        }}
+                                        badgeContent={
+                                            <IconButton style={{ background: 'rgb(110, 110, 220)', color: "whitesmoke" }}>
+                                                <AddPhotoAlternateIcon />
+                                            </IconButton>
+                                        }
+                                        overlap="circular"
+                                        onClick={handleBadgeClick}
+                                    >
+                                        <Avatar alt={stacticData.username} src={avatar} sx={{ width: '150px', height: '150px' }} />
+                                    </Badge>
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        style={{ display: 'none' }}
+                                        onChange={handleFileChange}
+                                    />
+                                </div>
+                                <List>
+                                    <ListItem disablePadding>
+                                        <ListItemButton>
+                                            <ListItemIcon>
+                                                <Grid3x3Icon />
+                                            </ListItemIcon>
+                                            <ListItemText primary={matricule} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                    <ListItem disablePadding>
+                                        <ListItemButton>
+                                            <ListItemIcon>
+                                                <PersonIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary={stacticData.username} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                    <ListItem disablePadding>
+                                        <ListItemButton>
+                                            <ListItemIcon>
+                                                <MilitaryTechIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary={stacticData.level} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                </List>
+                            </LeftSidePaper>
 
-                    <Stack direction="row" spacing={3}>
-                        <Stack direction="column" spacing={1} width={'50%'}>
-                            <Typography align='left' fontSize={18}>Basic Info</Typography>
-                            <label htmlFor="name">Name</label>
-                            <TextField id="outlined-basic" name='newNom' variant="outlined" size='small' fullWidth value={userInfos.newNom} onChange={handleChange} />
-                            <label htmlFor="">Surname</label>
-                            <TextField id="outlined-basic" name='newSurnom' variant="outlined" size='small' fullWidth value={userInfos.newSurnom} onChange={handleChange} />
-                            <label htmlFor="">Age</label>
-                            <TextField id="outlined-basic" name='newAge' variant="outlined" size='small' fullWidth value={userInfos.newAge ? userInfos.newAge : ""} onChange={handleChange} />
+                            <RightSidePaper variant="outlined">
+                                <Typography variant='h5' align='left' style={{ marginBottom: '25px' }}><b>Edit Member Informations</b></Typography>
+
+                                <Stack direction="row" spacing={3}>
+                                    <Stack direction="column" spacing={1} width={'50%'}>
+                                        <Typography align='left' fontSize={18}>Basic Info</Typography>
+                                        <label htmlFor="name">Name</label>
+                                        <TextField id="outlined-basic" name='newNom' variant="outlined" size='small' fullWidth value={userInfos.newNom} onChange={handleChange} />
+                                        <label htmlFor="">Surname</label>
+                                        <TextField id="outlined-basic" name='newSurnom' variant="outlined" size='small' fullWidth value={userInfos.newSurnom} onChange={handleChange} />
+                                        <label htmlFor="">Age</label>
+                                        <TextField id="outlined-basic" name='newAge' variant="outlined" size='small' fullWidth value={userInfos.newAge ? userInfos.newAge : ""} onChange={handleChange} />
+                                    </Stack>
+                                    <Stack direction="column" spacing={1} width={'50%'}>
+                                        <Typography align='left' fontSize={18}>Member Info</Typography>
+                                        <label htmlFor="">Current Level</label>
+                                        <TextField id="outlined-basic" name='newLevel' variant="outlined" size='small' fullWidth value={userInfos.newLevel} onChange={handleChange} />
+                                        <label htmlFor="">Member since</label>
+                                        <TextField id="outlined-basic" name='newYear' variant="outlined" size='small' fullWidth value={userInfos.newYear} onChange={handleChange} />
+                                        <label htmlFor="">Paid Inscription Fees</label>
+                                        <TextField id="outlined-basic" name='newPaid' variant="outlined" size='small' fullWidth value={userInfos.newPaid} onChange={handleChange} />
+                                    </Stack>
+                                </Stack>
+                                <Stack spacing={4} direction="row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'right', marginTop: '30px' }}>
+                                    <Button variant="outlined" style={{ borderColor: 'tomato', color: 'tomato' }} startIcon={<DeleteForeverIcon />} onClick={handleClickOpen}>Delete Member</Button>
+                                    <Button variant="contained" startIcon={<SaveAsIcon />} onClick={saveData}>Save Changes</Button>
+                                </Stack>
+
+                            </RightSidePaper>
+                            <ToastContainer autoClose={700} />
                         </Stack>
-                        <Stack direction="column" spacing={1} width={'50%'}>
-                            <Typography align='left' fontSize={18}>Member Info</Typography>
-                            <label htmlFor="">Current Level</label>
-                            <TextField id="outlined-basic" name='newLevel' variant="outlined" size='small' fullWidth value={userInfos.newLevel} onChange={handleChange} />
-                            <label htmlFor="">Member since</label>
-                            <TextField id="outlined-basic" name='newYear' variant="outlined" size='small' fullWidth value={userInfos.newYear} onChange={handleChange} />
-                            <label htmlFor="">Paid Inscription Fees</label>
-                            <TextField id="outlined-basic" name='newPaid' variant="outlined" size='small' fullWidth value={userInfos.newPaid} onChange={handleChange} />
-                        </Stack>
-                    </Stack>
-                    <Stack spacing={4} direction="row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'right', marginTop: '30px' }}>
-                        <Button variant="outlined" style={{ borderColor: 'tomato', color: 'tomato' }} startIcon={<DeleteForeverIcon />} onClick={handleClickOpen}>Delete Member</Button>
-                        <Button variant="contained" startIcon={<SaveAsIcon />} onClick={saveData}>Save Changes</Button>
-                    </Stack>
+                    </>
+                ) : (
+                    navigate("/members")
+                )
+            }
 
-                </RightSidePaper>
-                <ToastContainer autoClose={700} />
-            </Stack>
             <Copyright sx={{ mt: 5 }} />
         </>
     );
