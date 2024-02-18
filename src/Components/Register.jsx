@@ -287,6 +287,7 @@ export default function Register() {
                                     <MenuItem value="L1">L1</MenuItem>
                                     <MenuItem value="L2">L2</MenuItem>
                                     <MenuItem value="L3">L3</MenuItem>
+                                    <MenuItem value="M1">M1</MenuItem>
                                 </TextField>
                             </Grid>
                         </Grid>
