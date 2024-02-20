@@ -7,6 +7,7 @@ import AllMembers from './Components/AllMembers';
 import About from './Components/About';
 import ResponsiveAppBar from './Components/ResponsiveAppBar';
 import UserProfile from './Components/UserProfile';
+import Apk from './Components/Apk';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/scan" element={<Scanner />} />
           <Route path='/members' element={<AllMembers />} />
+          <Route path='/apk' element={<Apk />} />
           <Route path='/user-profile/:matricule' element={<UserProfile />} />
         </Routes>
       </div>
